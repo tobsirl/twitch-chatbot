@@ -6,9 +6,7 @@ const opts = {
     username: 'tobsbot',
     password: 'oauth:6y7b7tzxsn0htom8z1flshv62456ej'
   },
-  channels: [
-    '#tobs_irl'
-  ]
+  channels: ['#tobs_irl']
 };
 
 // Create a client with our options
@@ -22,8 +20,10 @@ client.on('connected', onConnectedHandler);
 client.connect();
 
 // Called every time a message comes in
-function onMessageHandler (target, context, msg, self) {
-  if (self) { return; } // Ignore messages from the bot
+function onMessageHandler(target, context, msg, self) {
+  if (self) {
+    return;
+  } // Ignore messages from the bot
 
   // Remove whitespace from chat message
   const commandName = msg.trim();
@@ -36,15 +36,24 @@ function onMessageHandler (target, context, msg, self) {
   } else {
     console.log(`* Unknown command ${commandName}`);
   }
+
+  // Add another chat command
+  if (commandName === '!hello') {
+    const name = "Tobs";
+    client.say(target, `Hi, ${name}. Hope you are having a nice day!`);
+    console.log(`* Executed ${commandName} command`);
+  } else {
+    console.log(`* Unknown command ${commandName}`);
+  }
 }
 
 // Function called when the "dice" command is issued
-function rollDice () {
+function rollDice() {
   const sides = 6;
   return Math.floor(Math.random() * sides) + 1;
 }
 
 // Called every time the bot connects to Twitch chat
-function onConnectedHandler (addr, port) {
+function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
