@@ -9,6 +9,9 @@ const opts = {
   channels: ['#tobs_irl']
 };
 
+// const addr = irc-ws.chat.twitch.tv;
+// const port = 80;
+
 // Create a client with our options
 const client = new tmi.client(opts);
 
@@ -18,6 +21,18 @@ client.on('connected', onConnectedHandler);
 
 // Connect to Twitch:
 client.connect();
+
+client.on('connected', () => {
+  // Do your stuff.
+  client
+    .say('channel', 'tobsbot connected')
+    .then(data => {
+      // data returns [channel]
+    })
+    .catch(err => {
+      //
+    });
+});
 
 // Called every time a message comes in
 function onMessageHandler(target, context, msg, self) {
@@ -39,7 +54,7 @@ function onMessageHandler(target, context, msg, self) {
 
   // Add another chat command
   if (commandName === '!hello') {
-    const name = "Tobs";
+    const name = opts.identity.username;
     client.say(target, `Hi, ${name}. Hope you are having a nice day!`);
     console.log(`* Executed ${commandName} command`);
   } else {
@@ -56,4 +71,5 @@ function rollDice() {
 // Called every time the bot connects to Twitch chat
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
+  client.say('#tobs_irl', `tobsbot connected...`);
 }
